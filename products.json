@@ -1,0 +1,402 @@
+[
+  {
+    "id": "0001",
+    "name": "Fresh Apples",
+    "price": 5.0,
+    "currency": "GBP",
+    "quantity": 100,
+    "isAlcohol": false
+  },
+  {
+    "id": "0009",
+    "name": "Lager Beer 15 Bottles x 300ml",
+    "price": 10,
+    "currency": "GBP",
+    "quantity": 92,
+    "isAlcohol": true
+  },
+  {
+    "id": "0010",
+    "name": "Dark Chocolate",
+    "price": 9.5,
+    "currency": "GBP",
+    "quantity": 91,
+    "isAlcohol": false
+  },
+  {
+    "id": "0011",
+    "name": "Strawberry Jam",
+    "price": 10.0,
+    "currency": "GBP",
+    "quantity": 90,
+    "isAlcohol": false
+  },
+  {
+    "id": "0012",
+    "name": "Green Olives",
+    "price": 10.5,
+    "currency": "GBP",
+    "quantity": 89,
+    "isAlcohol": false
+  },
+  {
+    "id": "0013",
+    "name": "Almond Butter",
+    "price": 11.0,
+    "currency": "GBP",
+    "quantity": 88,
+    "isAlcohol": false
+  },
+  {
+    "id": "0014",
+    "name": "Diet Soda",
+    "price": 11.5,
+    "currency": "GBP",
+    "quantity": 87,
+    "isAlcohol": false
+  },
+  {
+    "id": "0015",
+    "name": "Spicy Salsa",
+    "price": 12.0,
+    "currency": "GBP",
+    "quantity": 86,
+    "isAlcohol": false
+  },
+  {
+    "id": "0016",
+    "name": "Crisp Cereal",
+    "price": 12.5,
+    "currency": "GBP",
+    "quantity": 85,
+    "isAlcohol": false
+  },
+  {
+    "id": "0017",
+    "name": "Coffee Beans",
+    "price": 13.0,
+    "currency": "GBP",
+    "quantity": 84,
+    "isAlcohol": false
+  },
+  {
+    "id": "0002",
+    "name": "Baked Bread",
+    "price": 5.5,
+    "currency": "GBP",
+    "quantity": 99,
+    "isAlcohol": false
+  },
+  {
+    "id": "0003",
+    "name": "Crunchy Carrots",
+    "price": 6.0,
+    "currency": "GBP",
+    "quantity": 98,
+    "isAlcohol": false
+  },
+  {
+    "id": "0004",
+    "name": "Smoked Salmon",
+    "price": 6.5,
+    "currency": "GBP",
+    "quantity": 97,
+    "isAlcohol": false
+  },
+  {
+    "id": "0005",
+    "name": "Chocolate Cookies",
+    "price": 7.0,
+    "currency": "GBP",
+    "quantity": 96,
+    "isAlcohol": false
+  },
+  {
+    "id": "0006",
+    "name": "Greek Yogurt",
+    "price": 7.5,
+    "currency": "GBP",
+    "quantity": 95,
+    "isAlcohol": false
+  },
+  {
+    "id": "0007",
+    "name": "Cheddar Cheese",
+    "price": 8.0,
+    "currency": "GBP",
+    "quantity": 94,
+    "isAlcohol": false
+  },
+  {
+    "id": "0008",
+    "name": "Extra Virgin Olive Oil",
+    "price": 8.5,
+    "currency": "GBP",
+    "quantity": 93,
+    "isAlcohol": false
+  },
+  {
+    "id": "0018",
+    "name": "Tea Bags",
+    "price": 13.5,
+    "currency": "GBP",
+    "quantity": 83,
+    "isAlcohol": false
+  },
+  {
+    "id": "0019",
+    "name": "Bottled Water",
+    "price": 14.0,
+    "currency": "GBP",
+    "quantity": 82,
+    "isAlcohol": false
+  },
+  {
+    "id": "0020",
+    "name": "Energy Bars",
+    "price": 14.5,
+    "currency": "GBP",
+    "quantity": 81,
+    "isAlcohol": false
+  },
+  {
+    "id": "0021",
+    "name": "Cinnamon Whisky Liqueur",
+    "price": 15.0,
+    "currency": "GBP",
+    "quantity": 80,
+    "isAlcohol": true
+  },
+  {
+    "id": "0022",
+    "name": "Frozen Pizza",
+    "price": 15.5,
+    "currency": "GBP",
+    "quantity": 79,
+    "isAlcohol": false
+  },
+  {
+    "id": "0023",
+    "name": "Ice Cream Tub",
+    "price": 16.0,
+    "currency": "GBP",
+    "quantity": 78,
+    "isAlcohol": false
+  },
+  {
+    "id": "0024",
+    "name": "Pickles Jar",
+    "price": 16.5,
+    "currency": "GBP",
+    "quantity": 77,
+    "isAlcohol": false
+  },
+  {
+    "id": "0025",
+    "name": "Tofu Pack",
+    "price": 17.0,
+    "currency": "GBP",
+    "quantity": 76,
+    "isAlcohol": false
+  },
+  {
+    "id": "0026",
+    "name": "Rice Cakes",
+    "price": 17.5,
+    "currency": "GBP",
+    "quantity": 75,
+    "isAlcohol": false
+  },
+  {
+    "id": "0027",
+    "name": "Maple Syrup",
+    "price": 18.0,
+    "currency": "GBP",
+    "quantity": 74,
+    "isAlcohol": false
+  },
+  {
+    "id": "0028",
+    "name": "Honey Jar",
+    "price": 18.5,
+    "currency": "GBP",
+    "quantity": 73,
+    "isAlcohol": false
+  },
+  {
+    "id": "0029",
+    "name": "Mixed Nuts",
+    "price": 19.0,
+    "currency": "GBP",
+    "quantity": 72,
+    "isAlcohol": false
+  },
+  {
+    "id": "0030",
+    "name": "Canned Tuna",
+    "price": 19.5,
+    "currency": "GBP",
+    "quantity": 71,
+    "isAlcohol": false
+  },
+  {
+    "id": "0031",
+    "name": "Dried Mango",
+    "price": 20.0,
+    "currency": "GBP",
+    "quantity": 70,
+    "isAlcohol": false
+  },
+  {
+    "id": "0032",
+    "name": "Granola Mix",
+    "price": 20.5,
+    "currency": "GBP",
+    "quantity": 69,
+    "isAlcohol": false
+  },
+  {
+    "id": "0033",
+    "name": "Balsamic Vinegar",
+    "price": 21.0,
+    "currency": "GBP",
+    "quantity": 68,
+    "isAlcohol": false
+  },
+  {
+    "id": "0034",
+    "name": "Whole Wheat Flour",
+    "price": 21.5,
+    "currency": "GBP",
+    "quantity": 67,
+    "isAlcohol": false
+  },
+  {
+    "id": "0038",
+    "name": "Oat Milk",
+    "price": 23.5,
+    "currency": "GBP",
+    "quantity": 63,
+    "isAlcohol": false
+  },
+  {
+    "id": "0039",
+    "name": "Quinoa Box",
+    "price": 24.0,
+    "currency": "GBP",
+    "quantity": 62,
+    "isAlcohol": false
+  },
+  {
+    "id": "0040",
+    "name": "Baby Food",
+    "price": 24.5,
+    "currency": "GBP",
+    "quantity": 61,
+    "isAlcohol": false
+  },
+  {
+    "id": "0041",
+    "name": "Coconut Oil",
+    "price": 25.0,
+    "currency": "GBP",
+    "quantity": 60,
+    "isAlcohol": false
+  },
+  {
+    "id": "0042",
+    "name": "Apple Cider Vinegar",
+    "price": 25.5,
+    "currency": "GBP",
+    "quantity": 59,
+    "isAlcohol": false
+  },
+  {
+    "id": "0043",
+    "name": "Multigrain Bread",
+    "price": 26.0,
+    "currency": "GBP",
+    "quantity": 58,
+    "isAlcohol": false
+  },
+  {
+    "id": "0044",
+    "name": "Marmalade",
+    "price": 26.5,
+    "currency": "GBP",
+    "quantity": 57,
+    "isAlcohol": false
+  },
+  {
+    "id": "0045",
+    "name": "BBQ Sauce",
+    "price": 27.0,
+    "currency": "GBP",
+    "quantity": 56,
+    "isAlcohol": false
+  },
+  {
+    "id": "0046",
+    "name": "Popcorn Kernels",
+    "price": 27.5,
+    "currency": "GBP",
+    "quantity": 55,
+    "isAlcohol": false
+  },
+  {
+    "id": "0047",
+    "name": "Dried Lentils",
+    "price": 28.0,
+    "currency": "GBP",
+    "quantity": 54,
+    "isAlcohol": false
+  },
+  {
+    "id": "0035",
+    "name": "Salted Chips",
+    "price": 22.0,
+    "currency": "GBP",
+    "quantity": 66,
+    "isAlcohol": false
+  },
+  {
+    "id": "0036",
+    "name": "Rice Milk",
+    "price": 22.5,
+    "currency": "GBP",
+    "quantity": 65,
+    "isAlcohol": false
+  },
+  {
+    "id": "0037",
+    "name": "Soy Milk",
+    "price": 23.0,
+    "currency": "GBP",
+    "quantity": 64,
+    "isAlcohol": false
+  },
+  {
+    "id": "0048",
+    "name": "Cashew Nuts",
+    "price": 28.5,
+    "currency": "GBP",
+    "quantity": 53,
+    "isAlcohol": false
+  },
+  {
+    "id": "0049",
+    "name": "Premium Vodka",
+    "price": 29.0,
+    "currency": "GBP",
+    "quantity": 52,
+    "isAlcohol": true
+  },
+  {
+    "id": "0050",
+    "name": "Kale Chips",
+    "price": 29.5,
+    "currency": "GBP",
+    "quantity": 51,
+    "isAlcohol": false
+  }
+]
