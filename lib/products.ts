@@ -45,13 +45,33 @@ export function sortProductsById(products: Product[]): Product[] {
   return products.sort((a, b) => (Number(a.id) > Number(b.id) ? 1 : -1));
 }
 
+export function filterSearchedProducts(products: Product[], query: string) {
+  return products.filter((product) =>
+    product.name.toLowerCase().includes(query.toLowerCase())
+  );
+}
+
 export async function fetchProducts(
   page: number,
-  pageSize: number
+  pageSize: number,
+  searchQuery?: string
 ): Promise<{ products: Product[]; totalNumberOfProducts: number }> {
   const productsCSV = await readCSV("./products.csv");
   const products = [...productsJSON, ...productsCSV];
-  const nonAlcoholProducts = products.filter((product) => !product.isAlcohol);
+
+  const checkSearch = () => {
+    if (searchQuery) {
+      return filterSearchedProducts(products, searchQuery);
+    } else {
+      return products;
+    }
+  };
+
+  const productsToFilter = checkSearch();
+
+  const nonAlcoholProducts = productsToFilter.filter(
+    (product) => !product.isAlcohol
+  );
   const sortedProducts = sortProductsById(nonAlcoholProducts);
   const paginatedProducts = paginateProducts(sortedProducts, page, pageSize);
   const totalNumberOfProducts = sortedProducts.length;
