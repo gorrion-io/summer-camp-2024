@@ -1,14 +1,33 @@
-import { Product } from "@/lib/products";
+//temp
+export const fetchCache = "force-no-store";
 
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
-  return res.json();
+import { notFound } from "next/navigation";
+import ChangePageButton from "../components/page-change-handler";
+import { productsPerPage } from "../constants/main";
+import { Product } from "../types/Product";
+
+interface ProductsProps {
+  searchParams?: {
+    page?: string;
+  };
 }
 
-export default async function Products() {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
-  const products = await getProducts();
+async function getProducts(
+  page: number
+): Promise<{ products: Product[]; totalNumberOfProducts: number }> {
+  const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
+  if (!res.ok) {
+    throw new Error(
+      "Error occurred while connecting to database, please try again later"
+    );
+  }
+  const products = await res.json();
+  return products;
+}
+
+export default async function Products({ searchParams }: ProductsProps) {
+  const currentPage = Number(searchParams?.page) || 1;
+  const { products, totalNumberOfProducts } = await getProducts(currentPage);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -54,52 +73,61 @@ export default async function Products() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-                      {product.id}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-                      {product.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-                      {product.price} {product.currency}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-                      {product.quantity}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-                      {product.isAlcohol ? "Yes" : "No"}
-                    </td>
-                  </tr>
-                ))}
+                {products[0]?.id
+                  ? products.map((product) => (
+                      <tr key={product.id}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
+                          {product.id}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                          {product.name}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                          {product.price} {product.currency}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                          {product.quantity}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                          {product.isAlcohol ? "Yes" : "No"}
+                        </td>
+                      </tr>
+                    ))
+                  : notFound()}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing{" "}
+                  <span className="font-medium">
+                    {currentPage * productsPerPage - productsPerPage + 1}
+                  </span>{" "}
+                  to{" "}
+                  <span className="font-medium">
+                    {currentPage * productsPerPage < totalNumberOfProducts
+                      ? currentPage * productsPerPage
+                      : totalNumberOfProducts}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium">{totalNumberOfProducts}</span>{" "}
+                  results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
-                <a
-                  href="#"
-                  className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
-                  Previous
-                </a>
-                <a
-                  href="#"
-                  className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
-                  Next
-                </a>
+                <ChangePageButton
+                  buttonText="Previous"
+                  buttonAction="prev"
+                  totalNumberOfProducts={totalNumberOfProducts}
+                />
+                <ChangePageButton
+                  buttonText="Next"
+                  buttonAction="next"
+                  totalNumberOfProducts={totalNumberOfProducts}
+                />
               </div>
             </nav>
           </div>

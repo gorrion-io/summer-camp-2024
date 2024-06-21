@@ -10,6 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "csv-parser": "^3.0.0",
+    "fs": "^0.0.1-security",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18"
