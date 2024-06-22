@@ -1,14 +1,18 @@
 import { Product } from "@/lib/products";
+import Link from "next/link";
 
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
+async function getProducts(page: number): Promise<Product[]> {
+  const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
   return res.json();
 }
 
-export default async function Products() {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
-  const products = await getProducts();
+export default async function Products({
+  params,
+}: {
+  params: { page: string };
+}) {
+  const currentPage = Number(params.page);
+  const products = await getProducts(currentPage);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -75,7 +79,6 @@ export default async function Products() {
                 ))}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
@@ -88,18 +91,18 @@ export default async function Products() {
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
-                <a
-                  href="#"
+                <Link
+                  href={`${currentPage - 1}`}
                   className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Previous
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href={`${currentPage + 1}`}
                   className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Next
-                </a>
+                </Link>
               </div>
             </nav>
           </div>
