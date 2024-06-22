@@ -10,7 +10,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "next": "14.2.4",
+    "@types/papaparse": "^5.3.14",
+    "csv-string": "^4.1.1",
+    "next": "^14.2.4",
+    "papaparse": "^5.4.1",
     "react": "^18",
     "react-dom": "^18"
   },
