@@ -7,5 +7,5 @@
 import { fetchProducts } from "@/lib/products";
 
 export async function GET() {
-  return Response.json(await fetchProducts(1));
+  return Response.json(await fetchProducts(8));
 }
