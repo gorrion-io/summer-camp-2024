@@ -1,7 +1,7 @@
-import { Product } from "@/lib/products";
+import { ProductsResponse } from "@/lib/products";
 import Link from "next/link";
 
-async function getProducts(page: number): Promise<Product[]> {
+async function getProducts(page: number): Promise<ProductsResponse> {
   const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
   return res.json();
 }
@@ -12,7 +12,7 @@ export default async function Products({
   params: { page: string };
 }) {
   const currentPage = Number(params.page);
-  const products = await getProducts(currentPage);
+  const { products, paginationMetaData } = await getProducts(currentPage);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -58,7 +58,7 @@ export default async function Products({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {products.map((product) => (
+                {products.map((product: any) => (
                   <tr key={product.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
                       {product.id}
