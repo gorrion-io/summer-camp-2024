@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from "@/lib/consts";
 import { ProductsResponse } from "@/lib/products";
 import Link from "next/link";
 
@@ -13,6 +14,12 @@ export default async function Products({
 }) {
   const currentPage = Number(params.page);
   const { products, paginationMetaData } = await getProducts(currentPage);
+
+  const firstProductIndex =
+    (paginationMetaData.currentPage - 1) * PAGE_SIZE + 1;
+  const lastProductIndex = paginationMetaData.nextPage
+    ? firstProductIndex + PAGE_SIZE - 1
+    : paginationMetaData.totalRecords;
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -57,6 +64,7 @@ export default async function Products({
                   </th>
                 </tr>
               </thead>
+
               <tbody className="divide-y divide-gray-800">
                 {products.map((product: any) => (
                   <tr key={product.id}>
@@ -79,27 +87,39 @@ export default async function Products({
                 ))}
               </tbody>
             </table>
+
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing{" "}
+                  <span className="font-medium">{firstProductIndex}</span> to{" "}
+                  <span className="font-medium">{lastProductIndex}</span> of{" "}
+                  <span className="font-medium">
+                    {paginationMetaData.totalRecords}
+                  </span>{" "}
+                  results
                 </p>
               </div>
+
               <div className="flex flex-1 justify-between sm:justify-end">
                 <Link
                   href={`${currentPage - 1}`}
-                  className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  className={`relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 ${
+                    paginationMetaData.prevPage ??
+                    "pointer-events-none ring-gray-600 text-gray-600"
+                  }`}
                 >
                   Previous
                 </Link>
                 <Link
                   href={`${currentPage + 1}`}
-                  className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  className={`relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 ${
+                    paginationMetaData.nextPage ??
+                    "pointer-events-none ring-gray-600 text-gray-600"
+                  }`}
                 >
                   Next
                 </Link>
