@@ -4,6 +4,11 @@
  * The endpoint should accept a query parameter "page" to return the corresponding page
  */
 
-export async function GET() {
-    return Response.json([]);
+import { fetchProducts } from "@/lib/products";
+import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
+
+export async function GET(req: NextRequest) {
+  const page = Number(req.nextUrl.searchParams.get("page")) || 0;
+  return Response.json(fetchProducts(page));
 }
