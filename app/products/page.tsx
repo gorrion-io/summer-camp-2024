@@ -1,14 +1,40 @@
-import { Product } from "@/lib/products";
+"use client";
 
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
+import { Product } from "@/lib/products";
+import { useState, useEffect } from "react";
+
+async function getProducts(page: number): Promise<Product[]> {
+  const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
+  console.log("Current Page:", page);
   return res.json();
 }
 
-export default async function Products() {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
-  const products = await getProducts();
+export default function Products() {
+  const [page, setPage] = useState(0);
+  const [productsPages, setAllProducts] = useState<[Product[]]>([[]]);
+  const [productsCount, setProductsCount] = useState(0);
+
+  const updatePage = (newPage: number) => {
+    if (newPage < 0 || newPage >= productsPages.length - 1) return;
+    setPage(newPage);
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      let page = 0;
+      let fetchedProducts: Product[] = await getProducts(page++);
+      let products: [Product[]] = [fetchedProducts];
+
+      while (fetchedProducts.length > 0) {
+        fetchedProducts = await getProducts(page++);
+        products.push(fetchedProducts);
+      }
+      setProductsCount(products.reduce((a, b) => a + b.length, 0));
+      setAllProducts(products);
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -54,7 +80,7 @@ export default async function Products() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {products.map((product) => (
+                {productsPages[page].map((product) => (
                   <tr key={product.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
                       {product.id}
@@ -75,27 +101,31 @@ export default async function Products() {
                 ))}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing <span className="font-medium">{page * 10}</span> to{" "}
+                  <span className="font-medium">
+                    {Math.min(page * 10 + 10, productsCount)}
+                  </span>{" "}
+                  of <span className="font-medium">{productsCount}</span>{" "}
+                  results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
                 <a
                   href="#"
+                  onClick={() => updatePage(page - 1)}
                   className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Previous
                 </a>
                 <a
                   href="#"
+                  onClick={() => updatePage(page + 1)}
                   className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Next
