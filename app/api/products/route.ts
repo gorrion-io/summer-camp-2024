@@ -1,9 +1,14 @@
-/**
- * TODO: Prepare an endpoint to return a list of products
- * The endpoint should return a pagination of 10 products per page
- * The endpoint should accept a query parameter "page" to return the corresponding page
- */
+import { fetchProducts } from "@/lib/products";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-    return Response.json([]);
+export function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const page = searchParams.get("page");
+  const productsResponse = fetchProducts(Number(page) - 1);
+
+  if (!productsResponse.products.length || Number(page) < 0) {
+    return new NextResponse("No products found!", { status: 404 });
+  }
+
+  return NextResponse.json(productsResponse);
 }
