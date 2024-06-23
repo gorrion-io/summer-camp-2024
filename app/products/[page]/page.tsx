@@ -4,6 +4,12 @@ import Link from "next/link";
 
 async function getProducts(page: number): Promise<ProductsResponse> {
   const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
+
+  if (!res.ok) {
+    const errorMess = await res.text();
+    throw new Error(errorMess || "Failed to fetch products!");
+  }
+
   return res.json();
 }
 
