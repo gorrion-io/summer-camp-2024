@@ -1,13 +1,6 @@
-export type Product = {
-    id: string;
-    name: string;
-    price: number;
-    currency: string;
-    quantity: number;
-    isAlcohol: boolean;
-};
+import { Product } from "@/app/types/productTypes";
 
 export function fetchProducts(page: number): Product[] {
-    // todo
-    return [];
+  // todo
+  return [];
 }
