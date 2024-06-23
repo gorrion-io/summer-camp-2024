@@ -7,11 +7,7 @@ async function getProducts(page: number): Promise<ProductsResponse> {
   return res.json();
 }
 
-export default async function Products({
-  params,
-}: {
-  params: { page: string };
-}) {
+export default async function Page({ params }: { params: { page: string } }) {
   const currentPage = Number(params.page);
   const { products, paginationMetaData } = await getProducts(currentPage);
 
