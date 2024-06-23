@@ -19,7 +19,10 @@ export default function Products() {
    */
 
   const incrementPage = () => {
-    setPage((page) => page + 1);
+    paginationData.totalNumber ==
+    paginationData.firstElement + products.length - 1
+      ? setPage(page)
+      : setPage((page) => page + 1);
   };
 
   const decrementPage = () => {
