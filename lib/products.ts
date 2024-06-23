@@ -1,7 +1,5 @@
 import { readFileSync } from "fs";
-import fs from "fs";
 import Papa from "papaparse";
-import { SetStateAction } from "react";
 
 export type Product = {
   id: string;
@@ -17,35 +15,38 @@ export type PaginationData = {
   firstElement: number;
 };
 
-export interface ProductArrayWithTotal extends Array<Product> {
+export interface ProductArrayWithPagination extends Array<Product> {
   products: Product[];
   paginationData: PaginationData;
 }
 
-const isAlcoholHidden = true;
+const IS_ALCOHOL_HIDDEN = true;
+const ITEMS_PER_PAGE = 10;
 
-export function fetchProducts(page: number): ProductArrayWithTotal {
+export function fetchProducts(page: number): ProductArrayWithPagination {
   const pageNumber = page < 1 ? 1 : page;
-  const jsonProducts: Product[] = fetchJsonProducts();
-  const csvProducts: Product[] = fetchCSVProducts();
-  const products: Product[] = [...jsonProducts, ...csvProducts];
-  const startIndex = (pageNumber - 1) * 10;
-  const filteredProducts = isAlcoholHidden
-    ? products.filter((product) => !product.isAlcohol)
-    : products;
+  const products: Product[] = [...fetchJsonProducts(), ...fetchCSVProducts()];
+  const filteredProducts = filterAlcoholProducts(products);
+  const startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
   const totalSize = filteredProducts.length;
   const sortedProducts = filteredProducts
     .sort((a, b) => a.id.localeCompare(b.id))
     .slice(startIndex, startIndex + 10);
-  const totalProducts: ProductArrayWithTotal = [
+  const productsWithPagination = [
     ...sortedProducts,
-  ] as ProductArrayWithTotal;
-  totalProducts.paginationData = {
+  ] as ProductArrayWithPagination;
+  productsWithPagination.paginationData = {
     totalNumber: totalSize,
     firstElement: startIndex + 1,
   };
-  return totalProducts;
+  return productsWithPagination;
 }
+
+const filterAlcoholProducts = (products: Product[]): Product[] => {
+  return IS_ALCOHOL_HIDDEN
+    ? products.filter((product) => !product.isAlcohol)
+    : products;
+};
 
 const fetchJsonProducts = (): Product[] => {
   try {

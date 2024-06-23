@@ -5,13 +5,11 @@
  */
 
 import { fetchProducts } from "@/lib/products";
-import { Product, PaginationData, ProductArrayWithTotal } from "@/lib/products";
-
-const isAlcoholHidden = true;
+import { PaginationData, ProductArrayWithPagination } from "@/lib/products";
 
 export async function GET(request: Request) {
   const page = extractPageNumber(request);
-  const products: ProductArrayWithTotal = await fetchSortedProducts(page);
+  const products: ProductArrayWithPagination = await fetchSortedProducts(page);
   const paginationData: PaginationData = products.paginationData;
   return Response.json({ products, paginationData });
 }

@@ -1,9 +1,13 @@
 "use client";
 
-import { Product, PaginationData, ProductArrayWithTotal } from "@/lib/products";
+import {
+  Product,
+  PaginationData,
+  ProductArrayWithPagination,
+} from "@/lib/products";
 import React, { useState, useEffect } from "react";
 
-async function getProducts(page: number): Promise<ProductArrayWithTotal> {
+async function getProducts(page: number): Promise<ProductArrayWithPagination> {
   const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
   return res.json();
 }
@@ -15,8 +19,6 @@ export default function Products() {
     totalNumber: 0,
     firstElement: 0,
   });
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
 
   const incrementPage = () => {
     paginationData.totalNumber ==
@@ -30,7 +32,7 @@ export default function Products() {
   };
 
   useEffect(() => {
-    getProducts(page).then((data) => {
+    getProducts(page).then((data: ProductArrayWithPagination) => {
       setProducts(data.products);
       setPaginationData(data.paginationData);
     });
@@ -101,7 +103,6 @@ export default function Products() {
                 ))}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
