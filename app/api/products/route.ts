@@ -4,6 +4,24 @@
  * The endpoint should accept a query parameter "page" to return the corresponding page
  */
 
-export async function GET() {
-    return Response.json([]);
+import { fetchProducts } from "@/lib/products";
+import { PaginationData, ProductArrayWithPagination } from "@/lib/products";
+
+export async function GET(request: Request) {
+  const page = extractPageNumber(request);
+  const products: ProductArrayWithPagination = await fetchSortedProducts(page);
+  const paginationData: PaginationData = products.paginationData;
+  return Response.json({ products, paginationData });
+}
+
+function extractPageNumber(request: Request): number {
+  const url = new URL(request.url);
+  const pageQueryParam = url.searchParams.get("page");
+  const pageNumber = parseInt(pageQueryParam || "1", 10);
+  return pageNumber;
+}
+
+async function fetchSortedProducts(page: number) {
+  const products = fetchProducts(page);
+  return products;
 }
