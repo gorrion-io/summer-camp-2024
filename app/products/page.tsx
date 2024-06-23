@@ -1,14 +1,22 @@
-import { Product } from "../types/productTypes";
+import getProducts from "@/lib/getProducts";
+import { redirect } from "next/navigation";
 
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
-  return res.json();
-}
-
-export default async function Products() {
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
   /* TODO: Create an endpoint that returns a list of products, and use that here.
    */
-  const products = await getProducts();
+  const currentPage = Number(searchParams.page);
+  if (!currentPage || currentPage < 1) {
+    redirect("/products?page=1");
+  }
+  const productsData = await getProducts(currentPage);
+
+  const paginatedProductsList = productsData.paginatedProductsList;
+  const totalNumberOfPages = productsData.totalNumberOfPages;
+  const allProductsCount = productsData.allProductsCount;
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -54,7 +62,7 @@ export default async function Products() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {products.map((product) => (
+                {/* {products.map((product) => (
                   <tr key={product.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
                       {product.id}
@@ -72,7 +80,7 @@ export default async function Products() {
                       {product.isAlcohol ? "Yes" : "No"}
                     </td>
                   </tr>
-                ))}
+                ))} */}
               </tbody>
             </table>
             {/* TODO: Pagination */}
