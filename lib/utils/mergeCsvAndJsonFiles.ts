@@ -7,12 +7,16 @@ const mergeCsvAndJsonProducts = async () => {
   const jsonProductsFilePath = path.resolve(process.cwd(), "products.json");
   const csvProductsFilePath = path.resolve(process.cwd(), "products.csv");
 
-  const [productsJsonList, productsCsvList] = await Promise.all([
-    parseJsonFile<Product[]>(jsonProductsFilePath),
-    parseCsvFile<Product[]>(csvProductsFilePath),
-  ]);
+  try {
+    const [productsJsonList, productsCsvList] = await Promise.all([
+      parseJsonFile<Product[]>(jsonProductsFilePath),
+      parseCsvFile<Product[]>(csvProductsFilePath),
+    ]);
 
-  return [...productsJsonList, ...productsCsvList];
+    return [...productsJsonList, ...productsCsvList];
+  } catch (error) {
+    throw new Error(`Error merging CSV and JSON products: ${error}`);
+  }
 };
 
 export default mergeCsvAndJsonProducts;

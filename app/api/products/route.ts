@@ -9,17 +9,38 @@ import { PaginatedResponse } from "@/app/types/paginatedResponseType";
  */
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const pageNumber = parseInt(searchParams.get("page") as string);
+  try {
+    const { searchParams } = new URL(req.url);
+    const pageNumber = parseInt(searchParams.get("page") as string);
 
-  const { paginatedProductsList, totalNumberOfPages, allProductsCount } =
-    await fetchProducts(pageNumber);
+    if (!pageNumber || pageNumber < 1) {
+      return NextResponse.json(
+        { message: "Invalid page number" },
+        { status: 400 }
+      );
+    }
 
-  const response: PaginatedResponse = {
-    paginatedProductsList,
-    totalNumberOfPages,
-    allProductsCount,
-  };
+    const { paginatedProductsList, totalNumberOfPages, allProductsCount } =
+      await fetchProducts(pageNumber);
 
-  return NextResponse.json(response, { status: 200 });
+    if (pageNumber > totalNumberOfPages) {
+      return NextResponse.json(
+        { message: "Page number larger than expected number of pages" },
+        { status: 404 }
+      );
+    }
+
+    const response: PaginatedResponse = {
+      paginatedProductsList,
+      totalNumberOfPages,
+      allProductsCount,
+    };
+
+    return NextResponse.json(response, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
