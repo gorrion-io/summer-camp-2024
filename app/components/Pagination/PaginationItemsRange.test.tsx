@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { test, expect } from "vitest";
 import PaginationItemsRange from "./PaginationItemsRange";
 
-test("renders pagination items range correctly when page number is 10", () => {
+test("renders pagination items range correctly when page number is 1", () => {
   render(<PaginationItemsRange currentPage={1} allProductsCount={100} />);
 
   expect(screen.getByTestId("first-index")).toHaveTextContent("1");
