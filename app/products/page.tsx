@@ -13,7 +13,7 @@ export default async function Products({
 }) {
   /* TODO: Create an endpoint that returns a list of products, and use that here.
    */
-  const currentPage = Number(searchParams.page);
+  const currentPage = parseInt(searchParams.page);
   if (!currentPage || currentPage < 1) {
     redirect("/products?page=1");
   }

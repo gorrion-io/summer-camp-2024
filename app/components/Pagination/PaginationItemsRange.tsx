@@ -18,9 +18,18 @@ const PaginationItemsRange = ({
   return (
     <p className="pt-3 sm:pt-0 text-sm sm:mr-auto">
       Showing{" "}
-      <span className="font-medium">{firstPaginatedListElementIndex}</span> to{" "}
-      <span className="font-medium">{lastPaginatedListElementIndex}</span> of{" "}
-      <span className="font-medium">{lastListElementIndex}</span> results
+      <span className="font-medium" data-testid="first-index">
+        {firstPaginatedListElementIndex}
+      </span>{" "}
+      to{" "}
+      <span className="font-medium" data-testid="last-index">
+        {lastPaginatedListElementIndex}
+      </span>{" "}
+      of{" "}
+      <span className="font-medium" data-testid="total-count">
+        {lastListElementIndex}
+      </span>{" "}
+      results
     </p>
   );
 };
