@@ -4,6 +4,8 @@
  * The endpoint should accept a query parameter "page" to return the corresponding page
  */
 
+import { fetchProducts } from "@/lib/products";
+
 export async function GET() {
-    return Response.json([]);
+    return Response.json(fetchProducts(0));
 }
