@@ -1,6 +1,6 @@
 import { Product } from "@/lib/products";
 import axios from "axios";
-import {productsLength} from "@/lib/products";
+import { productsLength } from "@/lib/products";
 async function getProducts(page: number): Promise<Product[]> {
   const res = await axios.get(
     `http://localhost:3000/api/products?page=${page}`
@@ -17,7 +17,8 @@ export default async function Products({
    */
   const page = searchParams.page ? parseInt(searchParams.page.toString()) : 0;
   const products = await getProducts(page);
-
+  const nextPage = (page + 1) * 10;
+  
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mt-8 flow-root">
@@ -90,21 +91,37 @@ export default async function Products({
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing <span className="font-medium">{page * 10}</span> to{" "}
+                  <span className="font-medium">
+                    {nextPage > productsLength
+                      ? productsLength
+                      : nextPage}
+                  </span>{" "}
+                  of <span className="font-medium">{productsLength}</span>{" "}
+                  results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
                 <a
-                  href={page===0 ? "products" : "?page=" + (page - 1)}
-                  className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  href={page === 0 ? "products" : "?page=" + (page - 1)}
+                  className={
+                    "relative  inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 hover:text-black " +
+                    (page === 0 && "opacity-50 select-none pointer-events-none")
+                  }
                 >
                   Previous
                 </a>
                 <a
-                  href={productsLength<=(page+1)*10 ? "" : "?page=" + (page + 1)}
-                  className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  href={
+                    productsLength <= nextPage
+                      ? ""
+                      : "?page=" + (page + 1)
+                  }
+                  className={
+                    "relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 hover:text-black " +
+                    (productsLength <= nextPage &&
+                      "opacity-50 select-none pointer-events-none")
+                  }
                 >
                   Next
                 </a>
