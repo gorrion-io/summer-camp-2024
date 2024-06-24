@@ -9,3 +9,5 @@ export const PRODUCTS_TABLE_HEADERS = [
   "Quantity",
   "Contains alcohol",
 ];
+
+export const DOTS = "...";

@@ -14,7 +14,10 @@ export default function Home() {
         </h1>
       </div>
       <div className="flex place-items-center mt-12">
-        <Link href="/products?page=1">
+        <Link
+          className="px-4 py-2 bg-white text-black rounded"
+          href="/products?page=1"
+        >
           Click here to see a list of products
         </Link>
       </div>

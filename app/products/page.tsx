@@ -4,6 +4,7 @@ import Container from "../components/Container";
 import ProductsTable from "../components/ProductsTable/ProductsTable";
 import ProductsTableBody from "../components/ProductsTable/ProductsTableBody";
 import ProductsTableHead from "../components/ProductsTable/ProductsTableHead";
+import Pagination from "../components/Pagination/Pagination";
 
 export default async function Products({
   searchParams,
@@ -31,6 +32,11 @@ export default async function Products({
         tableHead={<ProductsTableHead />}
       />
       {/* TODO: Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalNumberOfPages={totalNumberOfPages}
+        allProductsCount={allProductsCount}
+      />
     </Container>
   );
 }
