@@ -1,6 +1,7 @@
 import { Product } from "@/lib/products";
 import axios from "axios";
 import { productsLength } from "@/lib/products";
+import { redirect } from "next/navigation";
 async function getProducts(page: number): Promise<Product[]> {
   const res = await axios.get(
     `http://localhost:3000/api/products?page=${page}`
@@ -17,8 +18,9 @@ export default async function Products({
    */
   const page = searchParams.page ? parseInt(searchParams.page.toString()) : 0;
   const products = await getProducts(page);
+  if (products.length === 0) redirect("/products");
   const nextPage = (page + 1) * 10;
-  
+
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mt-8 flow-root">
@@ -93,9 +95,7 @@ export default async function Products({
                 <p className="text-sm">
                   Showing <span className="font-medium">{page * 10}</span> to{" "}
                   <span className="font-medium">
-                    {nextPage > productsLength
-                      ? productsLength
-                      : nextPage}
+                    {nextPage > productsLength ? productsLength : nextPage}
                   </span>{" "}
                   of <span className="font-medium">{productsLength}</span>{" "}
                   results
@@ -112,11 +112,7 @@ export default async function Products({
                   Previous
                 </a>
                 <a
-                  href={
-                    productsLength <= nextPage
-                      ? ""
-                      : "?page=" + (page + 1)
-                  }
+                  href={productsLength <= nextPage ? "" : "?page=" + (page + 1)}
                   className={
                     "relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 hover:text-black " +
                     (productsLength <= nextPage &&
