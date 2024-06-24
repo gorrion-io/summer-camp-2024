@@ -23,9 +23,12 @@ const productSchema = z.object({
 
 export function fetchProducts(page: number): Product[] {
   // todo
-  const json = readJson()
+  const json = readJson();
   const csv = readCsv();
-  return [...json,...csv];
+  return [...json, ...csv]
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .filter((p) => !p.isAlcohol)
+    .slice(page * 10, page * 10 + 10);
 }
 
 const readJson = () => {
@@ -38,22 +41,22 @@ const readJson = () => {
 };
 
 const readCsv = () => {
-    const csvrecords = fs.readFileSync(
-      path.join(process.cwd(), "products.csv"),
-      "utf-8"
-    );
-    const parsed = parse(csvrecords, {
-      header: true,
-      transformHeader: (h) => h.charAt(0).toLowerCase() + h.slice(1),
-    }).data;
-    const convertedCsvRecords = parsed.map((record: any) => {
-      return {
-        ...record,
-        price: parseFloat(record.price),
-        quantity: parseInt(record.quantity),
-        isAlcohol: record.isAlcohol === "0" ? false : true,
-      };
-    });
-    const parsedCsv = productSchema.array().parse(convertedCsvRecords);
-    return parsedCsv;
-  };
+  const csvrecords = fs.readFileSync(
+    path.join(process.cwd(), "products.csv"),
+    "utf-8"
+  );
+  const parsed = parse(csvrecords, {
+    header: true,
+    transformHeader: (h) => h.charAt(0).toLowerCase() + h.slice(1),
+  }).data;
+  const convertedCsvRecords = parsed.map((record: any) => {
+    return {
+      ...record,
+      price: parseFloat(record.price),
+      quantity: parseInt(record.quantity),
+      isAlcohol: record.isAlcohol === "0" ? false : true,
+    };
+  });
+  const parsedCsv = productSchema.array().parse(convertedCsvRecords);
+  return parsedCsv;
+};
