@@ -1,14 +1,49 @@
-import { Product } from "@/lib/products";
+"use client";
 
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
-  return res.json();
-}
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FetchedProducts } from "../constants/types";
 
-export default async function Products() {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
-  const products = await getProducts();
+const INITIAL_EMPTY_DATA: FetchedProducts = {
+  products: [],
+  productsQuantity: 0,
+  page: 0,
+  productsQuantityFrom: 0,
+  productsQuantityTo: 0,
+};
+
+export default function Products() {
+  const [fetchedProducts, setFetchedProducts] =
+    useState<FetchedProducts>(INITIAL_EMPTY_DATA);
+  const [loading, setLoading] = useState<boolean>(true);
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") || "1";
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/products?page=${page}`
+        );
+        const data = await res.json();
+        setFetchedProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="mx-auto mt-8 text-center text-xl font-bold">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -54,7 +89,7 @@ export default async function Products() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {products.map((product) => (
+                {fetchedProducts.products.map((product) => (
                   <tr key={product.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
                       {product.id}
@@ -75,31 +110,58 @@ export default async function Products() {
                 ))}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing{" "}
+                  <span className="font-medium">
+                    {fetchedProducts.productsQuantityFrom}
+                  </span>{" "}
+                  to{" "}
+                  <span className="font-medium">
+                    {fetchedProducts.productsQuantityTo}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium">
+                    {fetchedProducts.productsQuantity}
+                  </span>{" "}
+                  results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
-                <a
-                  href="#"
-                  className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
-                  Previous
-                </a>
-                <a
-                  href="#"
-                  className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
-                  Next
-                </a>
+                {parseInt(page) > 1 && (
+                  <a
+                    href={
+                      parseInt(page) > 1
+                        ? `http://localhost:3000/products?page=${
+                            parseInt(page) - 1
+                          }`
+                        : ""
+                    }
+                    className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  >
+                    Previous
+                  </a>
+                )}
+                {fetchedProducts.productsQuantityTo <
+                  fetchedProducts.productsQuantity && (
+                  <a
+                    href={
+                      fetchedProducts.productsQuantityTo <
+                      fetchedProducts.productsQuantity
+                        ? `http://localhost:3000/products?page=${
+                            parseInt(page) + 1
+                          }`
+                        : ""
+                    }
+                    className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  >
+                    Next
+                  </a>
+                )}
               </div>
             </nav>
           </div>
