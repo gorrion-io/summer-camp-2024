@@ -2,19 +2,22 @@ import fs from "fs";
 import { parse } from "csv-parse";
 import { Product, ProductSchema } from "../schemas/productSchema";
 
+export const PAGE_SIZE = 10;
+
 export const fetchProducts = async (
   page: number,
   includeAlcohol: boolean = false
 ): Promise<Product[]> => {
   const products = await getMergedProducts();
 
-  if (includeAlcohol) return products.slice(page * 10, (page + 1) * 10);
+  if (includeAlcohol)
+    return products.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   const nonAlcoholProducts = products
     .filter((product) => !product.isAlcohol)
     .sort((a, b) => a.id.localeCompare(b.id));
 
-  return nonAlcoholProducts.slice(page * 10, (page + 1) * 10);
+  return nonAlcoholProducts.slice(page * PAGE_SIZE, (page + 1) * 10);
 };
 
 export const fetchProductsCount = async (
