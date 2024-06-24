@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import { parse } from "csv-parse/sync";
-import { CsvProduct, Product } from "@/types";
+import { ApiResponse, CsvProduct, Product } from "@/types";
 
 export const loadJsonProducts = async (path: string): Promise<Product[]> => {
   try {
@@ -39,3 +39,26 @@ export const loadCsvProducts = async (path: string): Promise<Product[]> => {
     );
   }
 };
+
+export const mergeProductsLists = async (
+  jsonProductsPath: string,
+  csvProductsPath: string
+): Promise<Product[]> => {
+  try {
+    // load products from json and csv files
+    const jsonProductsData = await loadJsonProducts(jsonProductsPath);
+    const csvProductsData = await loadCsvProducts(csvProductsPath);
+
+    // return merged lists with only non-alcohol products
+    return [...jsonProductsData, ...csvProductsData].filter(
+      (product) => !product.isAlcohol
+    );
+  } catch (err) {
+    throw new Error(
+      err instanceof Error
+        ? err.message
+        : "An unknown error happened while trying to merge products lists."
+    );
+  }
+};
+
