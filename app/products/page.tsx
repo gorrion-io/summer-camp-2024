@@ -14,11 +14,9 @@ export default async function Products({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
   const page = searchParams.page ? parseInt(searchParams.page.toString()) : 0;
   const products = await getProducts(page);
-  if (products.length === 0) redirect("/products");
+  if (products.length === 0 || page<0) redirect("/products");
   const nextPage = (page + 1) * 10;
 
   return (
