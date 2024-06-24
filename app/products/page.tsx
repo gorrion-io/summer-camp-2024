@@ -1,9 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation'
-import { Product } from "@/lib/products";
+import { ProductResponse } from "@/lib/products";
 
-async function getProducts(page: number): Promise<Product[]> {
+async function getProducts(page: number): Promise<ProductResponse> {
   const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
   return res.json();
 }
@@ -11,7 +11,8 @@ async function getProducts(page: number): Promise<Product[]> {
 export default async function Products() {
   const searchParams = useSearchParams()
   const page = parseInt(searchParams.get("page") || '1');
-  const products = await getProducts(page);
+  const { products, total } = await getProducts(page);
+  const maxPage = Math.ceil(total / 10);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -78,16 +79,15 @@ export default async function Products() {
                 ))}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing <span className="font-medium">{ 1 + maxPage * ( page - 1 ) }</span> to{" "}
+                  <span className="font-medium">{ maxPage * ( page - 1 ) + products.length }</span> of{" "}
+                  <span className="font-medium">{ total }</span> results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
@@ -98,7 +98,7 @@ export default async function Products() {
                   Previous
                 </a>
                 <a
-                  href={`?page=${ page === 10 ? 10 : page + 1 }`}
+                  href={`?page=${ page === maxPage ? maxPage : page + 1 }`}
                   className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Next

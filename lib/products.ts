@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
 // CONSTS
-const PAGE_SIZE = 10;
+export const PAGE_SIZE = 10;
 
 export type Product = {
     id: string;
@@ -10,6 +10,11 @@ export type Product = {
     currency: string;
     quantity: number;
     isAlcohol: boolean;
+};
+
+export type ProductResponse = {
+    products: Product[];
+    total: number;
 };
 
 function parseCsvData(): Product[] {
@@ -36,7 +41,10 @@ function parseJsonData(): Product[] {
     return JSON.parse(data);
 }
 
-export function fetchProducts(page: number): Product[] {
+export function fetchProducts(page: number): ProductResponse {
     const data = [...parseCsvData(), ...parseJsonData()].filter((product) => !product.isAlcohol).sort((a, b) => a.id.localeCompare(b.id));
-    return data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+    return {
+        products: data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+        total: data.length,
+    };
 }
