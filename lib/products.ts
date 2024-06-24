@@ -1,5 +1,3 @@
-export const fetchCache = "force-no-store";
-
 import { createReadStream } from "fs";
 import productsJSON from "../products.json";
 import csvParser from "csv-parser";

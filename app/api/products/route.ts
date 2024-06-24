@@ -6,10 +6,13 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const page = Number(searchParams.get("page") || "1");
   const searchQuery = String(searchParams.get("query") || "");
+  const numberOfProductsPerPage = Number(
+    searchParams.get("perPage") || productsPerPage
+  );
 
   const { products, totalNumberOfProducts } = await fetchProducts(
     page,
-    productsPerPage,
+    numberOfProductsPerPage,
     searchQuery
   );
 
