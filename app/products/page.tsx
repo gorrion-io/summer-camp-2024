@@ -1,14 +1,23 @@
 import { Product } from "@/lib/products";
-
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
-  return res.json();
+import axios from "axios";
+import { productsLength } from "@/lib/products";
+import { redirect } from "next/navigation";
+async function getProducts(page: number): Promise<Product[]> {
+  const res = await axios.get(
+    `http://localhost:3000/api/products?page=${page}`
+  );
+  return res.data;
 }
 
-export default async function Products() {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
-  const products = await getProducts();
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const page = searchParams.page ? parseInt(searchParams.page.toString()) : 0;
+  const products = await getProducts(page);
+  if (products.length === 0 || page<0) redirect("/products");
+  const nextPage = (page + 1) * 10;
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -82,21 +91,31 @@ export default async function Products() {
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing <span className="font-medium">{page * 10}</span> to{" "}
+                  <span className="font-medium">
+                    {nextPage > productsLength ? productsLength : nextPage}
+                  </span>{" "}
+                  of <span className="font-medium">{productsLength}</span>{" "}
+                  results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
                 <a
-                  href="#"
-                  className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  href={page === 0 ? "products" : "?page=" + (page - 1)}
+                  className={
+                    "relative  inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 hover:text-black " +
+                    (page === 0 && "opacity-50 select-none pointer-events-none")
+                  }
                 >
                   Previous
                 </a>
                 <a
-                  href="#"
-                  className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                  href={productsLength <= nextPage ? "" : "?page=" + (page + 1)}
+                  className={
+                    "relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 hover:text-black " +
+                    (productsLength <= nextPage &&
+                      "opacity-50 select-none pointer-events-none")
+                  }
                 >
                   Next
                 </a>
