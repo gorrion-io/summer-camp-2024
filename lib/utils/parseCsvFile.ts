@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import { parse } from "csv-parse/sync";
-import type { ProductCsv } from "@/app/types/productTypes";
+import { ProductCsv } from "@/app/types/productTypes";
 
 const parseCsvFile = async <T>(filePath: string): Promise<T> => {
   try {

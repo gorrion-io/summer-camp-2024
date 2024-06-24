@@ -4,8 +4,11 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
+  --track-color: 0, 0, 0, 0.4;
+  --scrollbar-thumb: rgb(var(--foreground-rgb));
+  --scrollbar-track: rgba(var(--track-color));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,6 +16,9 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --track-color: 255, 255, 255, 0.4;
+    --scrollbar-thumb: rgb(var(--foreground-rgb));
+    --scrollbar-track: rgba(var(--track-color));
   }
 }
 
@@ -24,4 +30,17 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
 }
