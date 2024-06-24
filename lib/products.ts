@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
 // CONSTS
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 export type Product = {
     id: string;
