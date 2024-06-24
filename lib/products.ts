@@ -21,7 +21,7 @@ function parseCsvData(): Product[] {
     const data = fs.readFileSync("products.csv", "utf8");
     const lines = data.split("\n").slice(1);
     let products: Product[] = [];
-    lines.forEach((line) => {
+    lines.forEach((line: string) => {
         const [id, name, price, currency, quantity, isAlcohol] = line.split(",");
         products.push({
             id,
@@ -44,7 +44,7 @@ function parseJsonData(): Product[] {
 export function fetchProducts(page: number): ProductResponse {
     const data = [...parseCsvData(), ...parseJsonData()].filter((product) => !product.isAlcohol).sort((a, b) => a.id.localeCompare(b.id));
     return {
-        products: data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+        products: data.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
         total: data.length,
     };
 }
