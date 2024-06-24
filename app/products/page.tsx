@@ -1,14 +1,25 @@
-import { Product } from "@/lib/products";
+'use client';
 
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
+import { useSearchParams } from 'next/navigation'
+import { ProductResponse } from "@/lib/products";
+import { redirect } from 'next/navigation';
+
+async function getProducts(page: number): Promise<ProductResponse> {
+  if(isNaN(page) || page < 1)
+    redirect("/products")
+
+  const res = await fetch(`http://localhost:3000/api/products?page=${page}`);
   return res.json();
 }
 
 export default async function Products() {
-  /* TODO: Create an endpoint that returns a list of products, and use that here.
-   */
-  const products = await getProducts();
+  const searchParams = useSearchParams()
+  const page = parseInt(searchParams.get("page") || '1');
+  const { products, total } = await getProducts(page);
+  const maxPage = Math.ceil(total / 10);
+
+  if((1 + maxPage * ( page - 1 )) > total)
+    redirect("/products")
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -75,27 +86,26 @@ export default async function Products() {
                 ))}
               </tbody>
             </table>
-            {/* TODO: Pagination */}
             <nav
               className="flex items-center justify-between py-3"
               aria-label="Pagination"
             >
               <div className="hidden sm:block">
                 <p className="text-sm">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">1</span> of{" "}
-                  <span className="font-medium">N</span> results
+                  Showing <span className="font-medium">{ 1 + maxPage * ( page - 1 ) }</span> to{" "}
+                  <span className="font-medium">{ maxPage * ( page - 1 ) + products.length }</span> of{" "}
+                  <span className="font-medium">{ total }</span> results
                 </p>
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
                 <a
-                  href="#"
+                  href={`?page=${ page === 1 ? 1 : page - 1 }`}
                   className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Previous
                 </a>
                 <a
-                  href="#"
+                  href={`?page=${ page === maxPage ? maxPage : page + 1 }`}
                   className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Next
