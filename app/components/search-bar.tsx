@@ -1,14 +1,25 @@
 "use client";
 
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 
 const SearchBar = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
+  const params = new URLSearchParams(searchParams);
 
-  function handleSearch(term: string) {
-    const params = new URLSearchParams(searchParams);
+  // function handleSearch(term: string) {
+  //   if (term) {
+  //     params.set("query", term);
+  //     params.set("page", "1");
+  //   } else {
+  //     params.delete("query");
+  //   }
+  //   replace(`${pathname}?${params.toString()}`);
+  // }
+
+  const handleSearch = useDebouncedCallback((term: string) => {
     if (term) {
       params.set("query", term);
       params.set("page", "1");
@@ -16,7 +27,7 @@ const SearchBar = () => {
       params.delete("query");
     }
     replace(`${pathname}?${params.toString()}`);
-  }
+  }, 200);
 
   return (
     <div className="max-w-md mx-auto">
