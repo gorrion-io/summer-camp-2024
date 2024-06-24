@@ -1,9 +1,9 @@
-/**
- * TODO: Prepare an endpoint to return a list of products
- * The endpoint should return a pagination of 10 products per page
- * The endpoint should accept a query parameter "page" to return the corresponding page
- */
+import { fetchProducts } from "@/lib/products";
 
-export async function GET() {
-    return Response.json([]);
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const products = fetchProducts(page);
+
+  return Response.json(products);
 }
