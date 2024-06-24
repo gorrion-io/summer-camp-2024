@@ -21,14 +21,16 @@ const productSchema = z.object({
   isAlcohol: z.boolean(),
 });
 
+export let productsLength: number = 0;
+
 export function fetchProducts(page: number): Product[] {
-  // todo
   const json = readJson();
   const csv = readCsv();
-  return [...json, ...csv]
-    .sort((a, b) => a.id.localeCompare(b.id))
-    .filter((p) => !p.isAlcohol)
-    .slice(page * 10, page * 10 + 10);
+  const outputArray = [...json, ...csv]
+  .sort((a, b) => a.id.localeCompare(b.id)) // sort by id asc
+  .filter((p) => !p.isAlcohol) // without alcohol
+  productsLength = outputArray.length;
+  return outputArray.slice(page * 10, page * 10 + 10);
 }
 
 const readJson = () => {

@@ -1,14 +1,22 @@
 import { Product } from "@/lib/products";
-
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products");
-  return res.json();
+import axios from "axios";
+import {productsLength} from "@/lib/products";
+async function getProducts(page: number): Promise<Product[]> {
+  const res = await axios.get(
+    `http://localhost:3000/api/products?page=${page}`
+  );
+  return res.data;
 }
 
-export default async function Products() {
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   /* TODO: Create an endpoint that returns a list of products, and use that here.
    */
-  const products = await getProducts();
+  const page = searchParams.page ? parseInt(searchParams.page.toString()) : 0;
+  const products = await getProducts(page);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -89,13 +97,13 @@ export default async function Products() {
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
                 <a
-                  href="#"
+                  href={page===0 ? "products" : "?page=" + (page - 1)}
                   className="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Previous
                 </a>
                 <a
-                  href="#"
+                  href={productsLength<=(page+1)*10 ? "" : "?page=" + (page + 1)}
                   className="relative ml-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
                 >
                   Next
