@@ -62,3 +62,12 @@ export const mergeProductsLists = async (
   }
 };
 
+export const getProducts = async (page: number): Promise<ApiResponse> => {
+  const response = await fetch(
+    `http://localhost:3000/api/products?page=${page}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch products.");
+  }
+  return response.json();
+};
