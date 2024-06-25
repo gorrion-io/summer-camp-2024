@@ -10,6 +10,8 @@ export type Product = {
   isAlcohol: boolean;
 };
 
+let totalProducts = 0;
+
 function readCSVFile(filePath: string): Product[] {
   //odczytujemy plik csv ze sceizki podanej w argumencie funkcji
   const csvData = fs.readFileSync(filePath, "utf-8");
@@ -59,6 +61,7 @@ export function fetchProducts(page: number): Product[] {
   );
   //sortowanie tablicy po id
   nonAlcoholProducts.sort((a, b) => a.id.localeCompare(b.id));
+  totalProducts = nonAlcoholProducts.length;
 
   const itemsPerPage = 10;
   const startIndex = page * itemsPerPage;
@@ -70,4 +73,8 @@ export function fetchProducts(page: number): Product[] {
   );
 
   return paginatedProducts;
+}
+
+export function getTotalProducts(): number {
+  return totalProducts;
 }
