@@ -1,5 +1,5 @@
 import ProductsPagination from "@/components/ProductsPagination";
-import ProductsTable from "@/components/productsTable";
+import ProductsTable from "@/components/ProductsTable";
 import { getProducts } from "@/lib/products";
 import { notFound } from "next/navigation";
 
